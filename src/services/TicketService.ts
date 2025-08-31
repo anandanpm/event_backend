@@ -4,11 +4,13 @@ import type { Ticket } from "../models/Ticket"
 import { IEventRepository } from "../interfaces/repositories/IEventRepository"
 import { ITicketRepository } from "../interfaces/repositories/ITicketRepository"
 
+
 @injectable()
 export class TicketService {
   constructor(
     @inject("TicketRepository") private tickets: ITicketRepository,
     @inject("EventRepository") private events: IEventRepository,
+
   ) {}
 
   async create(eventId: ObjectId, data: Partial<Ticket>) {

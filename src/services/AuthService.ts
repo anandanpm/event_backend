@@ -3,13 +3,13 @@ import bcrypt from "bcrypt"
 import { IUserRepository } from "../interfaces/repositories/IUserRepository"
 import { signJwt } from "../utils/jwt"
 import type { User } from "../models/User"
-import { EmailService } from "./EmailService"
+import { IEmailService } from "../interfaces/services/IEmailService"
 
 @injectable()
 export class AuthService {
   constructor(
     @inject("UserRepository") private users: IUserRepository,
-    @inject("EmailService") private mailer: EmailService
+    @inject("EmailService") private mailer: IEmailService
   ) {}
 
   async register(name: string, email: string, password: string) {

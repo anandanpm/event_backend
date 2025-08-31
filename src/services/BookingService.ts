@@ -4,12 +4,16 @@ import { stripe } from "../config/stripe"
 import type { Booking } from "../models/Booking"
 import { IBookingRepository } from "../interfaces/repositories/IBookingRepository"
 import { ITicketRepository } from "../interfaces/repositories/ITicketRepository"
+import { IEmailService } from "../interfaces/services/IEmailService"
+import { IUserRepository } from "../interfaces/repositories/IUserRepository"
 
 @injectable()
 export class BookingService {
  constructor(
     @inject("BookingRepository") private bookings: IBookingRepository,
     @inject("TicketRepository") private tickets: ITicketRepository,
+    @inject("EmailService") private mailer: IEmailService,
+    @inject("UserRepository") private users: IUserRepository
   ) {}
 
   async createBooking(userId: ObjectId, ticketId: ObjectId, quantity: number) {
@@ -56,6 +60,18 @@ export class BookingService {
     }
 
     await this.bookings.update(booking.id, { status: "paid", updatedAt: new Date() })
+    const user = await this.users.findById(booking.userId)
+    if (user) {
+      await this.mailer.send(
+        user.email,
+        "Booking Confirmed 🎉",
+        `<h1>Hi ${user.name},</h1>
+         <p>Your booking for ticket ID ${booking.ticketId.toHexString()} has been confirmed.</p>
+         <p>Quantity: ${booking.quantity}</p>
+         <p>Total Amount: $${(booking.amountCents / 100).toFixed(2)}</p>
+         <p>Thank you for booking with us!</p>`
+      )
+    }
   }
 
   async listForUser(userId: ObjectId) {
