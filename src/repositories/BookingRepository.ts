@@ -3,9 +3,10 @@ import { AppDataSource } from "../config/database"
 import { Booking } from "../models/Booking"
 import type { MongoRepository } from "typeorm"
 import type { ObjectId } from "mongodb"
+import { IBookingRepository } from "../interfaces/repositories/IBookingRepository"
 
 @injectable()
-export class BookingRepository {
+export class BookingRepository implements IBookingRepository {
   private repo: MongoRepository<Booking>
   constructor() {
     this.repo = AppDataSource.getMongoRepository(Booking)

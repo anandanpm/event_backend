@@ -9,10 +9,24 @@ import { UpdateEventDto } from "../dto/event/UpdateEventDto"
 const router = Router()
 const controller = container.resolve(EventController)
 
-router.get("/", controller.list)
-router.get("/:id", controller.get)
-router.post("/", auth(["admin", "user"]), validateBody(CreateEventDto), controller.create)
-router.put("/:id", auth(["admin", "user"]), validateBody(UpdateEventDto), controller.update)
-router.delete("/:id", auth(["admin", "user"]), controller.delete)
+router.get("/", controller.list.bind(controller))
+router.get("/:id", controller.get.bind(controller))
+router.post(
+  "/", 
+  auth(["admin"]), 
+  validateBody(CreateEventDto), 
+  controller.create.bind(controller)
+)
+router.put(
+  "/:id", 
+  auth(["admin"]), 
+  validateBody(UpdateEventDto), 
+  controller.update.bind(controller)
+)
+router.delete(
+  "/:id", 
+  auth(["admin"]), 
+  controller.delete.bind(controller)
+)
 
 export default router

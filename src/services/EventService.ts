@@ -1,11 +1,11 @@
-import { injectable } from "tsyringe"
-import type { EventRepository } from "../repositories/EventRepository"
+import { inject, injectable } from "tsyringe"
+import { IEventRepository } from "../interfaces/repositories/IEventRepository"
 import type { ObjectId } from "mongodb"
 import type { Event } from "../models/Event"
 
 @injectable()
 export class EventService {
-  constructor(private events: EventRepository) {}
+  constructor(@inject('EventRepository') private events: IEventRepository) {}
 
   async create(organizerId: ObjectId, data: Partial<Event>) {
     const now = new Date()

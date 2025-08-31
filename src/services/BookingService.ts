@@ -1,17 +1,15 @@
-import { injectable } from "tsyringe"
-import type { BookingRepository } from "../repositories/BookingRepository"
-import type { TicketRepository } from "../repositories/TicketRepository"
-import type { EventRepository } from "../repositories/EventRepository"
+import { inject, injectable } from "tsyringe"
 import type { ObjectId } from "mongodb"
 import { stripe } from "../config/stripe"
 import type { Booking } from "../models/Booking"
+import { IBookingRepository } from "../interfaces/repositories/IBookingRepository"
+import { ITicketRepository } from "../interfaces/repositories/ITicketRepository"
 
 @injectable()
 export class BookingService {
-  constructor(
-    private bookings: BookingRepository,
-    private tickets: TicketRepository,
-    private events: EventRepository,
+ constructor(
+    @inject("BookingRepository") private bookings: IBookingRepository,
+    @inject("TicketRepository") private tickets: ITicketRepository,
   ) {}
 
   async createBooking(userId: ObjectId, ticketId: ObjectId, quantity: number) {

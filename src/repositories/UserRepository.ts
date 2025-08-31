@@ -3,9 +3,10 @@ import { AppDataSource } from "../config/database"
 import { User } from "../models/User"
 import type { MongoRepository } from "typeorm"
 import type { ObjectId } from "mongodb"
+import { IUserRepository } from "../interfaces/repositories/IUserRepository"
 
 @injectable()
-export class UserRepository {
+export class UserRepository implements IUserRepository {
   private repo: MongoRepository<User>
   constructor() {
     this.repo = AppDataSource.getMongoRepository(User)

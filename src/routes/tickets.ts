@@ -8,8 +8,13 @@ import { CreateTicketDto } from "../dto/ticket/CreateTicketDto"
 const router = Router()
 const controller = container.resolve(TicketController)
 
-router.get("/event/:eventId", controller.listByEvent)
-router.get("/:id", controller.get)
-router.post("/event/:eventId", auth(["admin", "user"]), validateBody(CreateTicketDto), controller.create)
+router.get("/event/:eventId", controller.listByEvent.bind(controller))
+router.get("/:id", controller.get.bind(controller))
+router.post(
+  "/event/:eventId",
+  auth(["admin", "user"]),
+  validateBody(CreateTicketDto),
+  controller.create.bind(controller)
+)
 
 export default router

@@ -1,12 +1,12 @@
-import { injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe"
 import type { Request, Response, NextFunction } from "express"
-import type { EventService } from "../services/EventService"
+import { IEventService } from "../interfaces/services/IEventService"
 import { EventMapper } from "../mappers/EventMapper"
 import { ObjectId } from "mongodb"
 
 @injectable()
 export class EventController {
-  constructor(private events: EventService) {}
+  constructor(@inject('EventService') private events: IEventService) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {

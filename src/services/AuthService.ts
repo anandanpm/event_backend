@@ -1,12 +1,12 @@
-import { injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe"
 import bcrypt from "bcrypt"
-import type { UserRepository } from "../repositories/UserRepository"
+import { IUserRepository } from "../interfaces/repositories/IUserRepository"
 import { signJwt } from "../utils/jwt"
 import type { User } from "../models/User"
 
 @injectable()
 export class AuthService {
-  constructor(private users: UserRepository) {}
+  constructor(@inject("UserRepository") private users: IUserRepository ) {}
 
   async register(name: string, email: string, password: string) {
     const existing = await this.users.findByEmail(email.toLowerCase())

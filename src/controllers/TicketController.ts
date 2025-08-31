@@ -1,12 +1,12 @@
-import { injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe"
 import type { Request, Response, NextFunction } from "express"
-import type { TicketService } from "../services/TicketService"
+import { ITicketService } from "../interfaces/services/ITicketService"
 import { TicketMapper } from "../mappers/TicketMapper"
 import { ObjectId } from "mongodb"
 
 @injectable()
 export class TicketController {
-  constructor(private tickets: TicketService) {}
+  constructor(@inject('TicketService') private tickets: ITicketService) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {

@@ -1,4 +1,4 @@
-import { injectable } from "tsyringe"
+import { inject, injectable } from "tsyringe"
 import type { Request, Response, NextFunction } from "express"
 import type { BookingService } from "../services/BookingService"
 import { ObjectId } from "mongodb"
@@ -6,7 +6,7 @@ import { BookingMapper } from "../mappers/BookingMapper"
 
 @injectable()
 export class BookingController {
-  constructor(private bookings: BookingService) {}
+  constructor(@inject('BookingService') private bookings: BookingService) {}
 
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {

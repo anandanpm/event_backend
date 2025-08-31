@@ -1,14 +1,14 @@
-import { injectable } from "tsyringe"
-import type { TicketRepository } from "../repositories/TicketRepository"
-import type { EventRepository } from "../repositories/EventRepository"
+import { inject, injectable } from "tsyringe"
 import type { ObjectId } from "mongodb"
 import type { Ticket } from "../models/Ticket"
+import { IEventRepository } from "../interfaces/repositories/IEventRepository"
+import { ITicketRepository } from "../interfaces/repositories/ITicketRepository"
 
 @injectable()
 export class TicketService {
   constructor(
-    private tickets: TicketRepository,
-    private events: EventRepository,
+    @inject("TicketRepository") private tickets: ITicketRepository,
+    @inject("EventRepository") private events: IEventRepository,
   ) {}
 
   async create(eventId: ObjectId, data: Partial<Ticket>) {

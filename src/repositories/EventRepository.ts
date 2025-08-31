@@ -3,9 +3,10 @@ import { AppDataSource } from "../config/database"
 import { Event } from "../models/Event"
 import type { MongoRepository } from "typeorm"
 import type { ObjectId } from "mongodb"
+import { IEventRepository } from "../interfaces/repositories/IEventRepository"
 
 @injectable()
-export class EventRepository {
+export class EventRepository implements IEventRepository {
   private repo: MongoRepository<Event>
   constructor() {
     this.repo = AppDataSource.getMongoRepository(Event)

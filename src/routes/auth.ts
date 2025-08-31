@@ -8,7 +8,8 @@ import { LoginDto } from "../dto/auth/LoginDto"
 const router = Router()
 const controller = container.resolve(AuthController)
 
-router.post("/register", validateBody(RegisterDto), controller.register)
-router.post("/login", validateBody(LoginDto), controller.login)
+router.post("/register", validateBody(RegisterDto), controller.register.bind(controller));
+router.post("/login", validateBody(LoginDto), controller.login.bind(controller));
+
 
 export default router
