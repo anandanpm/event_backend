@@ -9,7 +9,7 @@ import { TicketService } from "../services/TicketService"
 import { BookingService } from "../services/BookingService"
 import { EmailService } from "../services/EmailService"
 
-// Simple DI registration with concrete classes
+
 export function initContainer(container: DependencyContainer) {
   container.registerSingleton(UserRepository, UserRepository)
   container.registerSingleton(EventRepository, EventRepository)
