@@ -2,6 +2,7 @@ import { inject, injectable } from "tsyringe"
 import type { Request, Response, NextFunction } from "express"
 import { IAuthService } from "../interfaces/services/IAuthService"
 import { UserMapper } from "../mappers/UserMapper"
+import { setAuthCookie } from "../helpers/cookies"
 
 @injectable()
 export class AuthController {
@@ -11,6 +12,7 @@ export class AuthController {
     try {
       const { name, email, password } = req.body
       const { user, token } = await this.auth.register(name, email, password)
+      setAuthCookie(res,token)
       res.json({ ...UserMapper.toSafe(user), token })
     } catch (err) {
       next(err)
@@ -21,6 +23,7 @@ export class AuthController {
     try {
       const { email, password } = req.body
       const { user, token } = await this.auth.login(email, password)
+      setAuthCookie(res,token)
       res.json({ ...UserMapper.toSafe(user), token })
     } catch (err) {
       next(err)
