@@ -1,19 +1,38 @@
 {
-  "name": "event_backend",
+  "name": "event_management",
   "version": "1.0.0",
+  "description": "'machine_task_event_management_backend(repo-architecture)",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "ts-node-dev src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anandanpm/event_backend.git"
-  },
-  "author": "Anandakrishnan pm",
+  "author": "Anandakrishnan PM",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/anandanpm/event_backend/issues"
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "class-validator": "^0.14.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.19.0",
+    "nodemailer": "^6.10.1",
+    "stripe": "^14.25.0",
+    "tsyringe": "^4.10.0",
+    "typeorm": "^0.3.26"
   },
-  "homepage": "https://github.com/anandanpm/event_backend#readme",
-  "description": ""
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.23",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20.19.11",
+    "@types/nodemailer": "^6.4.19",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.9.2"
+  }
 }
+
