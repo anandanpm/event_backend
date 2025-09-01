@@ -4,9 +4,10 @@ import { User } from "../models/User"
 import { Ticket } from "../models/Ticket"
 import { Event } from "../models/Event"
 import { Booking } from "../models/Booking"
+import dotenv from "dotenv"
+dotenv.config()
 
-const MONGO_URL = process.env.MONGO_URL || "mongodb://127.0.0.1:27017/event_management"
-
+const MONGO_URL = process.env.MONGO_URL 
 export const AppDataSource = new DataSource({
   type: "mongodb",
   url: MONGO_URL,
