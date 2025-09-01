@@ -8,28 +8,31 @@ import { initContainer } from "./config/container"
 import { AppDataSource } from "./config/database"
 import { errorHandler } from "./middleware/errorHandler"
 
-const PORT = process.env.PORT 
+const PORT = process.env.PORT
 
 async function bootstrap() {
   try {
     initContainer(container)
-
     await AppDataSource.initialize()
     console.log("[startup] database connected")
 
     const app = express()
 
-    app.use(cors({
-      origin: [  process.env.LOCALHOST as string, process.env.FRONTEND_URL as string ],
-      credentials: true, 
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    }))
+    // --- CORS first ---
+    app.use(
+      cors({
+        origin: [process.env.LOCALHOST as string, process.env.FRONTEND_URL as string],
+        credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+      })
+    )
 
     app.use(cookieParser())
 
     const stripeRoutes = (await import("./routes/stripe")).default
     app.use("/api/stripe", stripeRoutes)
+
 
     app.use(json())
     app.use(urlencoded({ extended: true }))
