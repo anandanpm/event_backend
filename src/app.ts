@@ -8,7 +8,7 @@ import { initContainer } from "./config/container"
 import { AppDataSource } from "./config/database"
 import { errorHandler } from "./middleware/errorHandler"
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT 
 
 async function bootstrap() {
   try {
@@ -19,9 +19,8 @@ async function bootstrap() {
 
     const app = express()
 
-
     app.use(cors({
-      origin: ['http://localhost:5173','https://event-frontend-line.vercel.app/'],
+      origin: [  process.env.LOCALHOST as string, process.env.FRONTEND_URL as string ],
       credentials: true, 
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization'],

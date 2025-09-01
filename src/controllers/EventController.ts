@@ -19,17 +19,13 @@ export class EventController {
     try {
 const organizerId = toObjectId((req as any).user.id); 
 
-      const data = req.body;
-      console.log(organizerId,'organizerId from the body');
-      console.log(data,'data from the body');
-      const event = await this.events.create(organizerId, {
+     const data = req.body;
+     const event = await this.events.create(organizerId, {
         title: data.title,
         description: data.description,
         location: data.location,
         date: new Date(data.date),
       } as any);
-
-      console.log(event,'event is saved in the database');
       res.status(201).json(EventMapper.toResponse(event));
     } catch (err) {
       next(err);
