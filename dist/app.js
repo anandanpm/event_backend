@@ -52,11 +52,12 @@ async function bootstrap() {
         await database_1.AppDataSource.initialize();
         console.log("[startup] database connected");
         const app = (0, express_1.default)();
+        // --- CORS first ---
         app.use((0, cors_1.default)({
             origin: [process.env.LOCALHOST, process.env.FRONTEND_URL],
             credentials: true,
-            methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-            allowedHeaders: ['Content-Type', 'Authorization'],
+            methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            allowedHeaders: ["Content-Type", "Authorization"],
         }));
         app.use((0, cookie_parser_1.default)());
         const stripeRoutes = (await Promise.resolve().then(() => __importStar(require("./routes/stripe")))).default;
