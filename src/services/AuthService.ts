@@ -4,6 +4,7 @@ import { IUserRepository } from "../interfaces/repositories/IUserRepository"
 import { signJwt } from "../utils/jwt"
 import type { User } from "../models/User"
 import { IEmailService } from "../interfaces/services/IEmailService"
+import { ObjectId } from "mongodb"
 
 @injectable()
 export class AuthService {
@@ -28,8 +29,9 @@ export class AuthService {
     }
 
     const created = await this.users.create(user)
-    const token = signJwt({ sub: created.id.toHexString(), role: created.role })
 
+
+    const token = signJwt({ sub: created.id.toString(), role: created.role })
 
     await this.mailer.send(
       created.email,
@@ -49,7 +51,9 @@ export class AuthService {
     const ok = await bcrypt.compare(password, user.passwordHash)
     if (!ok) throw new Error("Invalid credentials")
 
-    const token = signJwt({ sub: user.id.toHexString(), role: user.role })
+ 
+    const token = signJwt({ sub: user.id.toString(), role: user.role })
+
     return { user, token }
   }
 }

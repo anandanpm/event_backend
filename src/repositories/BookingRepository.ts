@@ -2,7 +2,7 @@ import { injectable } from "tsyringe"
 import { AppDataSource } from "../config/database"
 import { Booking } from "../models/Booking"
 import type { MongoRepository } from "typeorm"
-import type { ObjectId } from "mongodb"
+import { ObjectId } from "mongodb"
 import { IBookingRepository } from "../interfaces/repositories/IBookingRepository"
 
 @injectable()
@@ -30,7 +30,17 @@ export class BookingRepository implements IBookingRepository {
     return this.repo.findOne({ where: { paymentIntentId } as any })
   }
 
-  async listByUser(userId: ObjectId) {
-    return this.repo.find({ where: { userId }, order: { createdAt: -1 as any } })
-  }
+async listByUser(userId: ObjectId) {
+  return this.repo.find({
+    where: {
+      userId: userId
+    }
+  });
+}
+
+
+
+
+
+
 }

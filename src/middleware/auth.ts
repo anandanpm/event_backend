@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyJwt } from "../utils/jwt";
-
 type UserPayload = { id: string; role: string };
 
 export function auth(allowedRoles: string[]) {
@@ -12,17 +11,23 @@ export function auth(allowedRoles: string[]) {
       }
 
       const token = authHeader.split(" ")[1];
-      const payload = verifyJwt<UserPayload>(token);
+      const payload = verifyJwt<any>(token);
 
       if (!payload) {
         return res.status(401).json({ message: "Invalid token" });
       }
 
-      if (!allowedRoles.includes(payload.role)) {
+      // Map JWT "sub" → "id"
+      const userPayload: UserPayload = {
+        id: payload.sub,   // 👈 fix here
+        role: payload.role,
+      };
+
+      if (!allowedRoles.includes(userPayload.role)) {
         return res.status(403).json({ message: "Forbidden" });
       }
 
-      (req as any).user = payload; 
+      (req as any).user = userPayload;
       next();
     } catch (err) {
       return res.status(401).json({ message: "Unauthorized" });

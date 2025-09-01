@@ -9,7 +9,6 @@ export const BookingMapper = {
       quantity: b.quantity,
       amountCents: b.amountCents,
       status: b.status,
-      paymentIntentId: b.paymentIntentId,
       createdAt: b.createdAt.toISOString(),
       updatedAt: b.updatedAt.toISOString(),
     }
