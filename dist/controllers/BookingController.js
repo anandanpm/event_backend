@@ -24,9 +24,7 @@ let BookingController = class BookingController {
                 const userId = new mongodb_1.ObjectId(req.body.userId);
                 const ticketId = new mongodb_1.ObjectId(req.body.ticketId);
                 const quantity = Number(req.body.quantity);
-                console.log(userId, ticketId, quantity, 'the details arecomming');
                 const { booking, clientSecret } = await this.bookings.createBooking(userId, ticketId, quantity);
-                console.log(booking, 'booking is saved in the database');
                 res.status(201).json({ ...BookingMapper_1.BookingMapper.toResponse(booking), clientSecret });
             }
             catch (err) {
@@ -37,9 +35,7 @@ let BookingController = class BookingController {
             try {
                 const userIdString = req.query.userId;
                 const userId = new mongodb_1.ObjectId(userIdString);
-                console.log(userId, 'userId is coming');
                 const bookings = await this.bookings.listForUser(userId);
-                console.log(bookings, 'bookings from the database');
                 res.json(bookings.map(BookingMapper_1.BookingMapper.toResponse));
             }
             catch (err) {

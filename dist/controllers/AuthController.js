@@ -21,9 +21,7 @@ let AuthController = class AuthController {
         this.register = async (req, res, next) => {
             try {
                 const { name, email, password } = req.body;
-                console.log(name, email, password, 'req.body is comming');
                 const { user, token } = await this.auth.register(name, email, password);
-                console.log(user, token, 'user,token');
                 res.json({ ...UserMapper_1.UserMapper.toSafe(user), token });
             }
             catch (err) {
@@ -33,9 +31,7 @@ let AuthController = class AuthController {
         this.login = async (req, res, next) => {
             try {
                 const { email, password } = req.body;
-                console.log(email, password, 'req.body is comming');
                 const { user, token } = await this.auth.login(email, password);
-                console.log(user, token, 'user,token from the login');
                 res.json({ ...UserMapper_1.UserMapper.toSafe(user), token });
             }
             catch (err) {

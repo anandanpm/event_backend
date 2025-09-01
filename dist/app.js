@@ -45,7 +45,7 @@ const tsyringe_1 = require("tsyringe");
 const container_1 = require("./config/container");
 const database_1 = require("./config/database");
 const errorHandler_1 = require("./middleware/errorHandler");
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 async function bootstrap() {
     try {
         (0, container_1.initContainer)(tsyringe_1.container);
@@ -53,7 +53,7 @@ async function bootstrap() {
         console.log("[startup] database connected");
         const app = (0, express_1.default)();
         app.use((0, cors_1.default)({
-            origin: ['http://localhost:5173', 'https://event-frontend-line.vercel.app/'],
+            origin: [process.env.LOCALHOST, process.env.FRONTEND_URL],
             credentials: true,
             methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
             allowedHeaders: ['Content-Type', 'Authorization'],

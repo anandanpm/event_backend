@@ -23,9 +23,7 @@ let TicketController = class TicketController {
             try {
                 const eventId = new mongodb_1.ObjectId(req.params.eventId);
                 const { name, priceCents, totalQuantity } = req.body;
-                console.log(eventId, name, priceCents, totalQuantity, 'ticket details from the body');
                 const ticket = await this.tickets.create(eventId, { name, priceCents, totalQuantity });
-                console.log(ticket, 'ticket is saved in the database');
                 res.status(201).json(TicketMapper_1.TicketMapper.toResponse(ticket));
             }
             catch (err) {
@@ -45,9 +43,7 @@ let TicketController = class TicketController {
         this.get = async (req, res, next) => {
             try {
                 const id = new mongodb_1.ObjectId(req.params.id);
-                console.log(id, 'the id is comming ');
                 const ticket = await this.tickets.get(id);
-                console.log(ticket, 'ticket from the database');
                 res.json(TicketMapper_1.TicketMapper.toResponse(ticket));
             }
             catch (err) {
