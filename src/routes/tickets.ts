@@ -12,7 +12,7 @@ router.get("/event/:eventId", controller.listByEvent.bind(controller))
 router.get("/:id", controller.get.bind(controller))
 router.post(
   "/event/:eventId",
-  auth(["admin", "user"]),
+  auth(["admin"]),
   validateBody(CreateTicketDto),
   controller.create.bind(controller)
 )
