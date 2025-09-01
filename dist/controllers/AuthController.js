@@ -1,0 +1,53 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthController = void 0;
+const tsyringe_1 = require("tsyringe");
+const UserMapper_1 = require("../mappers/UserMapper");
+let AuthController = class AuthController {
+    constructor(auth) {
+        this.auth = auth;
+        this.register = async (req, res, next) => {
+            try {
+                const { name, email, password } = req.body;
+                console.log(name, email, password, 'req.body is comming');
+                const { user, token } = await this.auth.register(name, email, password);
+                console.log(user, token, 'user,token');
+                res.json({ ...UserMapper_1.UserMapper.toSafe(user), token });
+            }
+            catch (err) {
+                next(err);
+            }
+        };
+        this.login = async (req, res, next) => {
+            try {
+                const { email, password } = req.body;
+                console.log(email, password, 'req.body is comming');
+                const { user, token } = await this.auth.login(email, password);
+                console.log(user, token, 'user,token from the login');
+                res.json({ ...UserMapper_1.UserMapper.toSafe(user), token });
+            }
+            catch (err) {
+                next(err);
+            }
+        };
+    }
+};
+exports.AuthController = AuthController;
+exports.AuthController = AuthController = __decorate([
+    (0, tsyringe_1.injectable)(),
+    __param(0, (0, tsyringe_1.inject)("AuthService")),
+    __metadata("design:paramtypes", [Object])
+], AuthController);
+//# sourceMappingURL=AuthController.js.map
