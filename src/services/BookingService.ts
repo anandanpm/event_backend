@@ -74,6 +74,24 @@ export class BookingService {
     }
   }
 
+  async findByPaymentIntent(paymentIntentId: string) {
+    try {
+      console.log(`[BookingService] Looking up booking by PaymentIntent: ${paymentIntentId}`)
+      const booking = await this.bookings.findByPaymentIntent(paymentIntentId)
+      
+      if (!booking) {
+        console.log(`[BookingService] No booking found for PaymentIntent: ${paymentIntentId}`)
+        return null
+      }
+
+      console.log(`[BookingService] Found booking ${booking.id} with status: ${booking.status}`)
+      return booking
+    } catch (error) {
+      console.error(`[BookingService] Error finding booking by PaymentIntent ${paymentIntentId}:`, error)
+      throw error
+    }
+  }
+
   async listForUser(userId: ObjectId) {
     return this.bookings.listByUser(userId)
   }

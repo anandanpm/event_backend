@@ -27,7 +27,24 @@ export class BookingRepository implements IBookingRepository {
   }
 
   async findByPaymentIntent(paymentIntentId: string) {
-    return this.repo.findOne({ where: { paymentIntentId } as any })
+    try {
+      console.log(`[BookingRepository] Searching for booking with paymentIntentId: ${paymentIntentId}`)
+      
+      const booking = await this.repo.findOne({ 
+        where: { paymentIntentId } as any 
+      })
+      
+      if (booking) {
+        console.log(`[BookingRepository] Found booking ${booking.id} for paymentIntentId: ${paymentIntentId}`)
+      } else {
+        console.log(`[BookingRepository] No booking found for paymentIntentId: ${paymentIntentId}`)
+      }
+      
+      return booking
+    } catch (error) {
+      console.error(`[BookingRepository] Error finding booking by paymentIntentId ${paymentIntentId}:`, error)
+      throw error
+    }
   }
 
 async listByUser(userId: ObjectId) {

@@ -33,4 +33,25 @@ export class BookingController {
     }
   }
 
+  findByPaymentIntent = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { paymentIntentId } = req.params
+      
+      if (!paymentIntentId) {
+        return res.status(400).json({ error: "Payment intent ID is required" })
+      }
+
+      const booking = await this.bookings.findByPaymentIntent(paymentIntentId)
+      
+      if (!booking) {
+        return res.status(404).json({ error: "Booking not found" })
+      }
+
+      res.json(BookingMapper.toResponse(booking))
+    } catch (err) {
+      console.error("Error finding booking by payment intent:", err)
+      next(err)
+    }
+  }
+
 }

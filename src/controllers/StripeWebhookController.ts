@@ -5,23 +5,45 @@ import { BookingService } from "../services/BookingService"
 
 export class StripeWebhookController {
   static async handle(req: Request, res: Response) {
+    console.log("[StripeWebhook] Received webhook request")
+    
     const sig = req.headers["stripe-signature"]
     if (!sig || Array.isArray(sig)) {
+      console.error("[StripeWebhook] Missing or invalid stripe signature")
       return res.status(400).send("Missing stripe signature")
     }
+
     let event
     try {
       event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET)
+      console.log(`[StripeWebhook] Successfully constructed webhook event: ${event.type}`)
     } catch (err: any) {
+      console.error(`[StripeWebhook] Webhook signature verification failed:`, err.message)
       return res.status(400).send(`Webhook Error: ${err.message}`)
     }
 
-    if (event.type === "payment_intent.succeeded") {
-      const paymentIntent = event.data.object as any
-      const service = container.resolve(BookingService)
-      await service.handlePaymentSucceeded(paymentIntent.id)
-    }
+    try {
+      if (event.type === "payment_intent.succeeded") {
+        const paymentIntent = event.data.object as any
+        console.log(`[StripeWebhook] Processing payment_intent.succeeded for: ${paymentIntent.id}`)
+        
+        const bookingService = container.resolve(BookingService)
+        await bookingService.handlePaymentSucceeded(paymentIntent.id)
+        
+        console.log(`[StripeWebhook] Successfully processed payment_intent.succeeded for: ${paymentIntent.id}`)
+      } else {
+        console.log(`[StripeWebhook] Ignoring webhook event type: ${event.type}`)
+      }
 
-    res.json({ received: true })
+      res.json({ received: true })
+    } catch (error) {
+      console.error(`[StripeWebhook] Error processing webhook event:`, error)
+      
+      // Return 500 so Stripe will retry the webhook
+      res.status(500).json({ 
+        error: "Internal server error processing webhook",
+        received: false 
+      })
+    }
   }
 }

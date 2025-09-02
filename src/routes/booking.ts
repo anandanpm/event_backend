@@ -21,4 +21,9 @@ router.post(
   controller.create.bind(controller)
 );
 
+router.get(
+  "/by-payment-intent/:paymentIntentId",
+  controller.findByPaymentIntent.bind(controller)
+);
+
 export default router;
