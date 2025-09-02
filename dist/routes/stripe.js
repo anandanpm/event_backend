@@ -4,9 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const body_parser_1 = __importDefault(require("body-parser"));
+const express_2 = __importDefault(require("express"));
 const StripeWebhookController_1 = require("../controllers/StripeWebhookController");
 const router = (0, express_1.Router)();
-router.post("/webhook", body_parser_1.default.raw({ type: "application/json" }), StripeWebhookController_1.StripeWebhookController.handle);
+router.post("/webhook", express_2.default.raw({
+    type: "application/json",
+    limit: "50mb"
+}), StripeWebhookController_1.StripeWebhookController.handle);
 exports.default = router;
 //# sourceMappingURL=stripe.js.map

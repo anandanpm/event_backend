@@ -15,7 +15,7 @@ export class StripeWebhookController {
 
     let event
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET)
+      event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET as string)
       console.log(`[StripeWebhook] Successfully constructed webhook event: ${event.type}`)
     } catch (err: any) {
       console.error(`[StripeWebhook] Webhook signature verification failed:`, err.message)
@@ -39,7 +39,6 @@ export class StripeWebhookController {
     } catch (error) {
       console.error(`[StripeWebhook] Error processing webhook event:`, error)
       
-      // Return 500 so Stripe will retry the webhook
       res.status(500).json({ 
         error: "Internal server error processing webhook",
         received: false 

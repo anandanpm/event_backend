@@ -1,9 +1,16 @@
 import { Router } from "express"
-import bodyParser from "body-parser"
+import express from "express"
 import { StripeWebhookController } from "../controllers/StripeWebhookController"
 
 const router = Router()
 
-router.post("/webhook", bodyParser.raw({ type: "application/json" }), StripeWebhookController.handle)
+router.post(
+  "/webhook", 
+  express.raw({ 
+    type: "application/json",
+    limit: "50mb"
+  }), 
+  StripeWebhookController.handle
+)
 
 export default router

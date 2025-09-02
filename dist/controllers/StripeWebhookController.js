@@ -36,7 +36,6 @@ class StripeWebhookController {
         }
         catch (error) {
             console.error(`[StripeWebhook] Error processing webhook event:`, error);
-            // Return 500 so Stripe will retry the webhook
             res.status(500).json({
                 error: "Internal server error processing webhook",
                 received: false
