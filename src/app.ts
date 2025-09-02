@@ -2,7 +2,6 @@ import "reflect-metadata"
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import { json, urlencoded } from "body-parser"
 import { container } from "tsyringe"
 import { initContainer } from "./config/container"
 import { AppDataSource } from "./config/database"
@@ -29,19 +28,16 @@ async function bootstrap() {
     )
 
     app.use(cookieParser())
-    app.post('/api/stripe/webhook', 
-      express.raw({ type: 'application/json' }),
-      (req, res, next) => {
-        console.log("[App] Webhook route - body type:", typeof req.body)
-        console.log("[App] Webhook route - is Buffer:", Buffer.isBuffer(req.body))
-        console.log("[App] Webhook route - body length:", req.body?.length)
-        next()
-      },
+
+    app.post(
+      '/api/stripe/webhook',
+      express.raw({ type: 'application/json' }), 
       StripeWebhookController.handle
     )
 
-    app.use(json())
-    app.use(urlencoded({ extended: true }))
+
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
 
     app.get("/health", (_req, res) => res.json({ status: "ok" }))
 

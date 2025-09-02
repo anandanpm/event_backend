@@ -40,7 +40,6 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const body_parser_1 = require("body-parser");
 const tsyringe_1 = require("tsyringe");
 const container_1 = require("./config/container");
 const database_1 = require("./config/database");
@@ -60,14 +59,9 @@ async function bootstrap() {
             allowedHeaders: ["Content-Type", "Authorization"],
         }));
         app.use((0, cookie_parser_1.default)());
-        app.post('/api/stripe/webhook', express_1.default.raw({ type: 'application/json' }), (req, res, next) => {
-            console.log("[App] Webhook route - body type:", typeof req.body);
-            console.log("[App] Webhook route - is Buffer:", Buffer.isBuffer(req.body));
-            console.log("[App] Webhook route - body length:", req.body?.length);
-            next();
-        }, StripeWebhookController_1.StripeWebhookController.handle);
-        app.use((0, body_parser_1.json)());
-        app.use((0, body_parser_1.urlencoded)({ extended: true }));
+        app.post('/api/stripe/webhook', express_1.default.raw({ type: 'application/json' }), StripeWebhookController_1.StripeWebhookController.handle);
+        app.use(express_1.default.json());
+        app.use(express_1.default.urlencoded({ extended: true }));
         app.get("/health", (_req, res) => res.json({ status: "ok" }));
         const authRoutes = (await Promise.resolve().then(() => __importStar(require("./routes/auth")))).default;
         const eventRoutes = (await Promise.resolve().then(() => __importStar(require("./routes/events")))).default;
