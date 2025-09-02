@@ -37,7 +37,7 @@ class StripeWebhookController {
         let event;
         try {
             console.log("[StripeWebhook] Attempting to construct webhook event...");
-            event = stripe_1.stripe.webhooks.constructEvent(req.body, sig, stripe_1.STRIPE_WEBHOOK_SECRET);
+            event = stripe_1.stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
             console.log(`[StripeWebhook] ✅ Successfully constructed webhook event: ${event.type}`);
         }
         catch (err) {

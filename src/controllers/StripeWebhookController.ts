@@ -43,7 +43,7 @@ export class StripeWebhookController {
     let event
     try {
       console.log("[StripeWebhook] Attempting to construct webhook event...")
-      event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET)
+      event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET as string)
       console.log(`[StripeWebhook] ✅ Successfully constructed webhook event: ${event.type}`)
     } catch (err: any) {
       console.error(`[StripeWebhook] ❌ Webhook signature verification failed:`)
