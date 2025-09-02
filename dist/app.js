@@ -45,6 +45,7 @@ const tsyringe_1 = require("tsyringe");
 const container_1 = require("./config/container");
 const database_1 = require("./config/database");
 const errorHandler_1 = require("./middleware/errorHandler");
+const StripeWebhookController_1 = require("./controllers/StripeWebhookController");
 const PORT = process.env.PORT;
 async function bootstrap() {
     try {
@@ -52,7 +53,6 @@ async function bootstrap() {
         await database_1.AppDataSource.initialize();
         console.log("[startup] database connected");
         const app = (0, express_1.default)();
-        // --- CORS first ---
         app.use((0, cors_1.default)({
             origin: [process.env.LOCALHOST, process.env.FRONTEND_URL],
             credentials: true,
@@ -60,8 +60,12 @@ async function bootstrap() {
             allowedHeaders: ["Content-Type", "Authorization"],
         }));
         app.use((0, cookie_parser_1.default)());
-        const stripeRoutes = (await Promise.resolve().then(() => __importStar(require("./routes/stripe")))).default;
-        app.use("/api/stripe", stripeRoutes);
+        app.post('/api/stripe/webhook', express_1.default.raw({ type: 'application/json' }), (req, res, next) => {
+            console.log("[App] Webhook route - body type:", typeof req.body);
+            console.log("[App] Webhook route - is Buffer:", Buffer.isBuffer(req.body));
+            console.log("[App] Webhook route - body length:", req.body?.length);
+            next();
+        }, StripeWebhookController_1.StripeWebhookController.handle);
         app.use((0, body_parser_1.json)());
         app.use((0, body_parser_1.urlencoded)({ extended: true }));
         app.get("/health", (_req, res) => res.json({ status: "ok" }));

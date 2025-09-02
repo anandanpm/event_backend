@@ -1,3 +1,4 @@
+// config/stripe.ts
 import Stripe from "stripe"
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
@@ -14,6 +15,7 @@ if (!STRIPE_WEBHOOK_SECRET) {
 export const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: "2025-08-27.basil", 
 })
+
 
 console.log("[Stripe] Configuration:")
 console.log("[Stripe] Secret Key configured:", !!STRIPE_SECRET_KEY)

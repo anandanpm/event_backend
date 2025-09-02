@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.stripe = exports.STRIPE_WEBHOOK_SECRET = void 0;
+// config/stripe.ts
 const stripe_1 = __importDefault(require("stripe"));
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 exports.STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;

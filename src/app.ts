@@ -7,6 +7,7 @@ import { container } from "tsyringe"
 import { initContainer } from "./config/container"
 import { AppDataSource } from "./config/database"
 import { errorHandler } from "./middleware/errorHandler"
+import { StripeWebhookController } from "./controllers/StripeWebhookController"
 
 const PORT = process.env.PORT
 
@@ -18,7 +19,6 @@ async function bootstrap() {
 
     const app = express()
 
-    // --- CORS first ---
     app.use(
       cors({
         origin: [process.env.LOCALHOST as string, process.env.FRONTEND_URL as string],
@@ -29,10 +29,16 @@ async function bootstrap() {
     )
 
     app.use(cookieParser())
-
-    const stripeRoutes = (await import("./routes/stripe")).default
-    app.use("/api/stripe", stripeRoutes)
-
+    app.post('/api/stripe/webhook', 
+      express.raw({ type: 'application/json' }),
+      (req, res, next) => {
+        console.log("[App] Webhook route - body type:", typeof req.body)
+        console.log("[App] Webhook route - is Buffer:", Buffer.isBuffer(req.body))
+        console.log("[App] Webhook route - body length:", req.body?.length)
+        next()
+      },
+      StripeWebhookController.handle
+    )
 
     app.use(json())
     app.use(urlencoded({ extended: true }))
